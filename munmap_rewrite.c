@@ -3,12 +3,17 @@
 #include <stdint.h> 
 
 /*
-Technique should work on all versions of GLibC. However, the offsets used are specific 
-for this particular compilation of GLibC and for the exit function.
+Technique should work on all versions of GLibC. However, the offsets 
+used are specific for this particular compilation of GLibC 
+and for the exit function.
 
-Compile: `gcc free.c -g -o free`
+Compile: `./compile.sh`
+- Compiles AND sets the loader to the proper location
 
-POC written by POC written by Maxwell Dulin (Strikeout) 
+POC written by Maxwell Dulin (Strikeout) 
+For a step by step on how this works, please visit the following link:
+- https://maxwelldulin.com/BlogPost?post=6967456768.
+
 */
 int main(){
 	/*
@@ -16,7 +21,9 @@ int main(){
         ==================================
         In GLibC, there is a point where an allocation is so large that malloc
         decides that we need a seperate section of memory for it, instead 
-        of allocating it on the normal heap. This is determined by the mmap_threshold 
+        of allocating it on the normal heap. This is determined by 
+	the mmap_threshold. 
+
         Instead of the normal logic for getting a chunk, the system call *Mmap* is 
         used. This allocates a section of virtual memory and gives it back to the user. 
 

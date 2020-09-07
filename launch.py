@@ -1,4 +1,9 @@
 '''
+Launch script for the POC. Can be used for the following: 
+- Loading the proper version of LibC and Loader with the POC 
+- Easier debugging (in particular, setting breakpoints) 
+
+
 Mmap LEAKLESS Chunk Overwrites 
 ;tldr: Rewrite symbol table of LibC to get code execution
 
@@ -10,8 +15,7 @@ Notes:
 - Full RELRO does not do LAZY dynamic symbol resolution so the technique
   does not work with full relro enabled. 
 
-
-Steps in the code: 
+Steps in the code (POC in munmap_rewrite.c): 
 - Buffer overflow (vulnerability) 
 - Munmap LibC (.gnu.hash and .dynsym) 
 - Allocate over LibC with mmap
@@ -22,7 +26,7 @@ Steps in the code:
 from pwn import * 
 import os
 
-mode = 'DEBUG' # Turn on gdb
+mode = 'DEBUG' # Turn on gdb for this
 libc_name = './2.31/libc-2.31.so' # Set LibC vesion
 env = {}
 
@@ -33,18 +37,18 @@ elf = ELF(elf_name)
 if libc_name != '': 
 	libc = ELF(libc_name)
 	env = {"LD_PRELOAD": libc.path}
+
 	
+p = process([ elf.path],env=env)
+
 # Process creation 
 if mode == 'DEBUG': 
-	p = process([ elf.path],env=env)
 
 	# Set GDB to have source code debugging enabled
 	gdb.attach(p, gdbscript='''
-b 288
+b 199
 dir ./2.31
 ''')
-else: 
-	p = remote(domain, port) 
 
 p.interactive()
 
