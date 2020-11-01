@@ -30,3 +30,36 @@ Of course, there are a few drawbacks. But, most of these are just knowledge abou
 <li>The LibC (or other library) being attacked must be known or brute forced in order to have the offsets work properly</li>
 <li>Fairly good control over the size of allocations in order to get mmap chunks in the proper locations</li>
 </ol>
+
+## Using the Repo 
+Upon some further expection, it was noticed that the repo did not work AS is in all envs. For whatever reason  
+some offsets would change, resulting in a broken exploit. So, here are some steps for running the repo locally and in Docker.
+
+### Docker
+So, it only seemed logical to create a quick & easy dockerfile for this. Here are the instructions for using Docker with this: 
+- Install docker (pre-req) 
+- Build the Image: 
+  - `sudo docker build --tag muney .`
+- Start & login to the container: 
+  - `sudo docker run -it muney /bin/bash`
+- Once logged in the, the good stuff is in `house-of-muney`. So, move to this directy. 
+- Jump into tmux: 
+  - Tmux (terminal multiplexer) is SUPER nice because we can have multiple panes open in the same session. 
+  - This allows gdb to open
+- Run the code: 
+  - `python launch.py`
+  - Have fun in GDB and see what is going on!
+
+### Own Machine 
+Getting the technique running on your own machine is absolutely possible but may become tedious or annoying to do.   
+Regardless, here are some steps for that: 
+- Install python, pip, pwntools, tmux, pwndbg, patchelf, gcc and other assorted tools (pre-req)
+- Download the repo: `git clone https://github.com/mdulin2/house-of-muney/`
+- Fix the loader on the binary: 
+  - The exploit code MUST use the proper LibC and loader in the /2.31 file. 
+  - In order to do this, the loader was changed using ELFPATCH on the binary itself. 
+  - So, either do this yourself with patchelf or run the `./compile.sh` that changes the loader for you. 
+- Run the Code: `python launch.py`
+  - gdb will come up and STOP right before all of the black magic happens for the symbol resolution
+  - Put breakpoints where ever you want to see exactly what is happening
+  - If you are having issues with this, your offsets are probably broken... fix these yourself and they are likely in the intervals of page sizes. Good luck!
