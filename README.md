@@ -6,7 +6,9 @@ Are you tired of ASLR getting in your way? Annoyed by how unexploitable mmap chu
 Well, today is your lucky day! This is a full explanation on how a **leakless** heap exploitation technique that gives you **code execution**, that is 100% deterministic
 What is this, the year 2000!?  
   
-This technique IN FULL is described at https://maxwelldulin.com/BlogPost?post=6967456768 and was first used in a Qualysis exploit at https://www.qualys.com/2020/05/19/cve-2005-1513/remote-code-execution-qmail.txt
+This technique IN FULL is described at https://maxwelldulin.com/BlogPost?post=6967456768.
+
+This technique and was first used in a Qualys exploit for a [15 year old QMail vulnerability](https://www.qualys.com/2020/05/19/cve-2005-1513/remote-code-execution-qmail.txt). Another example of this being used is in [cpio](https://github.com/fangqyi/cpiopwn) by fangqyi.
 
 ## But How? 
 At a high level, this technique rewrites the lazy dynamic symbol resolution process of a library. You are probably thinking: *this is black magic*.  
