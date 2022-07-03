@@ -39,16 +39,8 @@ if libc_name != '':
 	env = {"LD_PRELOAD": libc.path}
 
 	
-p = process([ elf.path],env=env)
+p = gdb.debug([ elf.path],env=env)
 
-# Process creation 
-if mode == 'DEBUG': 
-
-	# Set GDB to have source code debugging enabled
-	gdb.attach(p, gdbscript='''
-b 303
-dir ./2.31
-''')
 
 p.interactive()
 

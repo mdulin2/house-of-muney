@@ -7,8 +7,8 @@ file_name=munmap_rewrite
 
 echo "Compile: munmap_rewrite"
 
-# Compile the code for non-leakless technique
-$(gcc $file_name.c -o $file_name -ggdb) 
+# Compile the code. Explicitly REMOVE 'now' linker flag to force lazy symbol resolution
+$(gcc $file_name.c -o $file_name -ggdb -g -Wl,-z,norelro -z lazy -no-pie) 
 
 loader=$(realpath $(pwd)/$version/ld-$version.so)
 
